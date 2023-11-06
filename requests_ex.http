@@ -1,0 +1,208 @@
+# примеры API-запросов
+
+@baseUrl = http://localhost:8000/api/
+
+# Пользователь
+
+# Создание пользователя
+POST {{baseUrl}}usercreate/
+Content-Type: application/json
+
+{
+  "username": "byuer",
+  "first_name": "Иван",
+  "last_name": "Иванов",
+  "email": "yulchik12-12y@yandex.ru",
+  "password": "123456lkldfkdfs"
+}
+
+###
+
+# Получение информации о пользователе
+GET {{baseUrl}}user/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+#  Изменение пользователя
+PATCH {{baseUrl}}user/2/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{
+  "password": "123"
+}
+
+###
+# Удаление пользователя
+DELETE {{baseUrl}}user/3/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+
+# контакт
+
+# Создание контакта
+POST {{baseUrl}}contact/create/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{
+  "city": "Москва",
+  "street": "Первая",
+  "house": "22",
+  "structure": "а",
+  "building": "2",
+  "apartment": "33",
+  "phone": "8-922-555-55-55"
+}
+
+###
+
+# Изменение контакта
+PATCH {{baseUrl}}contact/update/2/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{
+  "city": "Питер"
+}
+
+
+#Создание и удаление магазина
+
+# Запрос на создание магазина и загрузку товара из прайса по указанному URL
+POST {{baseUrl}}shop/create/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{
+  "name": "Связной",
+  "url": "https://github.com/TimgYul/python-final-diplom/tree/master/data/shop1.yaml"
+}
+
+###
+#  Запрос на получение списка магазинов
+GET {{baseUrl}}shop/all/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+# На деактивацию магазина
+PATCH {{baseUrl}}shop/update/13/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{
+  "state": "False"
+}
+
+###
+# Запрос на удаление магазина и товаров из прайса
+DELETE {{baseUrl}}shop/delete/18/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+###
+
+
+# Запросы на получение товара
+
+# 1. Получение списка товаров (все товары)
+GET {{baseUrl}}product/list/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+# 2. Фильтрация по модели (вхождение текста)
+GET {{baseUrl}}product/list/?search=xs-max
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+# 3. Фильтрация по стоимости (вхождение текста)
+GET {{baseUrl}}product/list/?search=1300
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+# 4. Фильтрация по дате
+GET {{baseUrl}}product/list/date/?time_create_after=2023-06-15&&time_create_before=2023-06-16
+Content-Type: application/json
+Authorization: Token 1bff16187689c5f66495b892330aaaf07c0a4514
+
+###
+# 5. Фильтрация по категориям (вхождение текста)
+GET {{baseUrl}}category/list/?search=Аксессуары
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+# 6. Фильтрация по магазинам (вхождение текста)
+GET {{baseUrl}}shop/list/?search=Связной
+Content-Type: application/json
+Authorization: Token 1bff16187689c5f66495b892330aaaf07c0a4514
+
+
+# Работа с заказами 
+###
+# Просмотр корзины
+GET {{baseUrl}}basket/list/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+###
+#  Создание заказа
+POST {{baseUrl}}basket/add/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+
+{ "shop":"Связной",
+  "external_id":"4672456",
+  "quantity": "1"
+}
+
+###
+# Удаление заказа
+DELETE {{baseUrl}}basket/delete/3/
+Content-Type: application/json
+Authorization: Token da9b8ba064ef945be8a6fb8e43461de28d81b66b
+###
+
+
+# Обработка заказа 
+
+# Запрос№15 Запрос для пользователя. Подразумевается, что пользователь, после того как добавил товары в корзину
+# может подтвердить заказ ("state":"Confirmed"), а после получения заказа установить статус доставлено ("state":"Delivered")
+# Выполняется сразу для всех заказов.
+POST {{baseUrl}}order/processing/
+Content-Type: application/json
+Authorization: Token 1bff16187689c5f66495b892330aaaf07c0a4514
+
+{ 
+  "state":"Confirmed"
+}
+
+###
+# Запрос для пользователя. Просмотр статуса заказа
+GET {{baseUrl}}order/list/
+Content-Type: application/json
+Authorization: Token 1bff16187689c5f66495b892330aaaf07c0a4514
+
+
+###
+# Запрос для администратора. Просмотр заказа по номеру
+GET {{baseUrl}}order/admin/list/2/
+Content-Type: application/json
+Authorization: Token 09d09282f47b580d13987a24dc28a61102c4b439
+
+###
+#  Запрос для администратора. Подразумевается, что администратор, после того как посмотрел заказ
+#отправляет их в доставку
+POST {{baseUrl}}order/admin/processing/
+Content-Type: application/json
+Authorization: Token 09d09282f47b580d13987a24dc28a61102c4b439
+
+{ 
+  "order":"3"
+}
+###
